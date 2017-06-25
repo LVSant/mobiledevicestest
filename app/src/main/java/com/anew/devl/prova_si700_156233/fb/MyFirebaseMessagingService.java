@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.anew.devl.prova_si700_156233;
+package com.anew.devl.prova_si700_156233.fb;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,6 +26,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.anew.devl.prova_si700_156233.MainActivity;
+import com.anew.devl.prova_si700_156233.R;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
@@ -82,12 +84,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
 
+
         Map<String, String> data = remoteMessage.getData();
         // Check if message contains a data payload.
         if (data.size() > 0) {
             Log.d(TAG, "Message data payload: " + data);
             Log.d(TAG, "_id " + data.get("_id"));
-            sendBroadcast(data.toString());
+
+            sendNotification(data.toString());
         }
 
 
@@ -99,11 +103,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void scheduleJob() {
         // [START dispatch_job]
+
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+
         Job myJob = dispatcher.newJobBuilder()
                 .setService(MyJobService.class)
                 .setTag("my-job-tag")
                 .build();
+
         dispatcher.schedule(myJob);
         // [END dispatch_job]
     }
@@ -128,7 +135,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                //.setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setSmallIcon(R.drawable.ic_collections_bookmark_black_24dp)
                 .setContentTitle("FCM Message")
                 .setContentText(messageBody)
                 .setAutoCancel(true)
