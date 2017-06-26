@@ -1,4 +1,4 @@
-package com.anew.devl.prova_si700_156233.fb;
+package com.anew.devl.prova_si700_156233.firebase;
 
 
 import android.util.Log;

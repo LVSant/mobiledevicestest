@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".fb.MyFirebaseInstanceIDService"
+            android:name=".firebase.MyFirebaseInstanceIDService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -18,7 +18,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".fb.MyFirebaseMessagingService"
+            android:name=".firebase.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -26,7 +26,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".fb.MyJobService"
+            android:name=".firebase.MyJobService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -34,13 +34,17 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".Navigation"
             android:label="@string/title_activity_bibliografias"
             android:theme="@style/AppTheme">
-
-        <intent-filter>
+        </activity>
+        <activity
+            android:name=".Navvv"
+            android:label="@string/title_activity_navvvv"
+            android:theme="@style/AppTheme">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

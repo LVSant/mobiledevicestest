@@ -5,13 +5,11 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.anew.devl.prova_si700_156233.Navigation">
+    tools:context="com.anew.devl.prova_si700_156233.Navvv">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" android:id="@+id/content_frame"/>
-
-
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

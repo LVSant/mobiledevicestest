@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeightLarge"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Navvv"
+    android:id="@+id/disciplinaAdapterLayout"
+    android:padding="6dip">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="6dip"
+        android:src="@drawable/ic_curso" />
+
+    <TextView
+        android:id="@+id/curso"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+
+        android:gravity="start"
+        android:maxLines="1"
+        android:textSize="14sp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/icon" />
+
+    <TextView
+        android:id="@+id/nomeDisciplina"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/icon"
+        android:layout_below="@+id/curso" />
+
+</RelativeLayout>
