@@ -14,11 +14,10 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(long _id, String tituloLivro, String autor, String image) {
+    public Livro(long _id, String tituloLivro, String autor) {
         this._id = _id;
         this.tituloLivro = tituloLivro;
         this.autor = autor;
-        this.image = image;
     }
 
     public long get_id() {

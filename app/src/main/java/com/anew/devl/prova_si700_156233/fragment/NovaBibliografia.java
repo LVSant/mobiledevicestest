@@ -1,11 +1,12 @@
 package com.anew.devl.prova_si700_156233.fragment;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +19,10 @@ import android.widget.ListView;
 import com.anew.devl.prova_si700_156233.R;
 import com.anew.devl.prova_si700_156233.adapter.DisciplinaAdapter;
 import com.anew.devl.prova_si700_156233.adapter.LivroAdapter;
+import com.anew.devl.prova_si700_156233.database.DBHelperDisciplina;
+import com.anew.devl.prova_si700_156233.database.DBHelperLivro;
 import com.anew.devl.prova_si700_156233.model.Disciplina;
 import com.anew.devl.prova_si700_156233.model.Livro;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +33,14 @@ public class NovaBibliografia extends Fragment {
     LivroAdapter livroAdapter;
     DisciplinaAdapter disciplinaAdapter;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.novabibliografia, container, false);
 
-
-            initListDisciplina(null, view);
-
-
+        initListDisciplina(view);
         initCardViewLivros(view);
-
 
         return view;
     }
@@ -52,24 +48,7 @@ public class NovaBibliografia extends Fragment {
     private void initCardViewLivros(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
-
-        /*TODO: Remover esse teste */
-        List<Livro> livrosList = new ArrayList<>();
-
-
-        livrosList.add(new Livro(1, "Calculo A", "Maria Flemming", "img"));
-        livrosList.add(new Livro(1, "PROG 1", "Alexandre Saudate", "img2"));
-        livrosList.add(new Livro(1, "Calculo A", "Maria Flemming", "img"));
-        livrosList.add(new Livro(1, "PROG 1", "Alexandre Saudate", "img2"));
-        livrosList.add(new Livro(1, "Calculo A", "Maria Flemming", "img"));
-        livrosList.add(new Livro(1, "PROG 1", "Alexandre Saudate", "img2"));
-        livrosList.add(new Livro(1, "Calculo A", "Maria Flemming", "img"));
-        livrosList.add(new Livro(1, "PROG 1", "Alexandre Saudate", "img2"));
-        livrosList.add(new Livro(1, "Calculo A", "Maria Flemming", "img"));
-        livrosList.add(new Livro(1, "PROG 1", "Alexandre Saudate", "img2"));
-        livrosList.add(new Livro(1, "Calculo A", "Maria Flemming", "img"));
-        livrosList.add(new Livro(1, "PROG 1", "Alexandre Saudate", "img2"));
-
+        List<Livro> livrosList = selectLivros(getContext());
 
         livroAdapter = new LivroAdapter(this.getContext(), livrosList);
 
@@ -83,21 +62,101 @@ public class NovaBibliografia extends Fragment {
 
     }
 
-    private void callNewBibliografia() {
-        Busca fragment2 = new Busca();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame, fragment2);
-        fragmentTransaction.commit();
+
+    private void initListDisciplina(View view) {
+
+        List<Disciplina> disciplinas = selectDisciplinas(getContext());
+
+        this.disciplinaAdapter = new DisciplinaAdapter(this.getContext(), disciplinas);
+
+        ListView listView = (ListView) view.findViewById(R.id.listviewDisciplinas);
+        listView.setAdapter(disciplinaAdapter);
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    private List<Livro> selectLivros(Context context) {
 
+        List<Livro> livros = new ArrayList<>();
+        DBHelperLivro helper = new DBHelperLivro(context);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String[] projection = {
+                DBHelperLivro.DBHelperLivroColumns._ID,
+                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_TITULO_LIVRO,
+                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_AUTOR
+        };
+
+
+        //String selection =  DBHelper.VeiculoDBHelper;
+        String sortByAdd =
+                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_TITULO_LIVRO + " DESC ";
+
+        Cursor c = db.query(
+                DBHelperLivro.DBHelperLivroColumns.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                null,                                     // The columns for the WHERE clause
+                null,                                     // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortByAdd                                 // The sort order
+        );
+
+        if (c.moveToFirst()) {
+            do {
+                //id, name, marca, preco, adicionado
+                long id = c.getLong(c.getColumnIndexOrThrow("_id"));
+                String tituloLivro = c.getString(c.getColumnIndexOrThrow("TituloLivro"));
+                String autor = c.getString(c.getColumnIndexOrThrow("Autor"));
+
+
+                livros.add(new Livro(id, tituloLivro, autor));
+
+            } while (c.moveToNext());
+        }
+        return livros;
     }
 
+    private List<Disciplina> selectDisciplinas(Context context) {
+
+
+        List<Disciplina> disciplinas = new ArrayList<>();
+        DBHelperDisciplina helper = new DBHelperDisciplina(context);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String[] projection = {
+                DBHelperDisciplina.DBHelperDisciplinaColumns._ID,
+                DBHelperDisciplina.DBHelperDisciplinaColumns.COLUMN_NAME_TITULO_DISCIPLINA,
+                DBHelperDisciplina.DBHelperDisciplinaColumns.COLUMN_NAME_CURSO
+        };
+
+
+        String sortByAdd =
+                DBHelperDisciplina.DBHelperDisciplinaColumns.COLUMN_NAME_TITULO_DISCIPLINA + " DESC ";
+
+        Cursor c = db.query(
+                DBHelperDisciplina.DBHelperDisciplinaColumns.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                null,                                     // The columns for the WHERE clause
+                null,                                     // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortByAdd                                 // The sort order
+        );
+
+        if (c.moveToFirst()) {
+            do {
+
+                long id = c.getLong(c.getColumnIndexOrThrow("_id"));
+                String tituloDisciplina = c.getString(c.getColumnIndexOrThrow("NomeDisciplina"));
+                String curso = c.getString(c.getColumnIndexOrThrow("Curso"));
+
+
+                disciplinas.add(new Disciplina(id, tituloDisciplina, curso));
+
+            } while (c.moveToNext());
+        }
+        return disciplinas;
+    }
 
     /**
      * RecyclerView item decoration - give equal margin around grid item
@@ -137,80 +196,9 @@ public class NovaBibliografia extends Fragment {
         }
     }
 
-    /**
-     * Adding few albums for testing
-     */
-  /*  private void prepareAlbums() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
-
-        livroAdapter.notifyDataSetChanged();
-    }
-*/
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
-
-    private void initListDisciplina(JSONArray modelosItems, View view) {
-
-        ArrayList<Disciplina> disciplinas = new ArrayList<>();
-        disciplinas.add(new Disciplina(0, "Algoritmos e Prog", "TADS"));
-        disciplinas.add(new Disciplina(0, "Calculo A", "TADS"));
-        disciplinas.add(new Disciplina(0, "Saneamento", "Engenharia Ambiental"));
-        disciplinas.add(new Disciplina(0, "Redes complexas", "Engenharia Telecom"));
-        disciplinas.add(new Disciplina(0, "Engenharia de Software", "TADS"));
-        disciplinas.add(new Disciplina(0, "Algoritmos e Prog", "TADS"));
-        disciplinas.add(new Disciplina(0, "Calculo A", "TADS"));
-        disciplinas.add(new Disciplina(0, "Saneamento", "Engenharia Ambiental"));
-        disciplinas.add(new Disciplina(0, "Redes complexas", "Engenharia Telecom"));
-        disciplinas.add(new Disciplina(0, "Engenharia de Software", "TADS"));
-        disciplinas.add(new Disciplina(0, "Algoritmos e Prog", "TADS"));
-        disciplinas.add(new Disciplina(0, "Calculo A", "TADS"));
-        disciplinas.add(new Disciplina(0, "Saneamento", "Engenharia Ambiental"));
-        disciplinas.add(new Disciplina(0, "Redes complexas", "Engenharia Telecom"));
-        disciplinas.add(new Disciplina(0, "Engenharia de Software", "TADS"));
-//
-//        try {
-//            for (int i = 0; i < modelosItems.length(); i++) {
-//                /*JSONObject jsonModelo = modelosItems.optJSONObject(i);
-//
-//                String name = (String) jsonModelo.get("fipe_name");
-//
-//                Object idjson = jsonModelo.get("id");
-//                String id;
-//                if (idjson instanceof String) {
-//                    id = idjson.toString();
-//                } else {
-//                    id = Integer.parseInt(idjson.toString()) + "";
-//
-//                }
-//                Modelo modelo = new Modelo(name, id);
-//
-//
-//                disciplinas.add(modelo);
-//*/            }
-//        } catch (JSONException jsonex) {
-//            Log.d("populateListModelo", jsonex.getLocalizedMessage());
-//        }
-
-
-        this.disciplinaAdapter = new DisciplinaAdapter(this.getContext(), disciplinas);
-
-        ListView listView = (ListView) view.findViewById(R.id.listviewDisciplinas);
-        listView.setAdapter(disciplinaAdapter);
-
     }
 
 }

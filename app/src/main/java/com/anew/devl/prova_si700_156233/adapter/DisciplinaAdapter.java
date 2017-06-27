@@ -18,7 +18,7 @@ public class DisciplinaAdapter extends BaseAdapter implements Serializable {
     Context context;
     List<Disciplina> data;
     private static LayoutInflater inflater = null;
-    private boolean zebraBackground = true;
+
 
     public DisciplinaAdapter(Context context, List<Disciplina> Disciplinas) {
         // TODO Auto-generated constructor stub
@@ -54,9 +54,9 @@ public class DisciplinaAdapter extends BaseAdapter implements Serializable {
         if (vi == null) {
             vi = inflater.inflate(R.layout.disciplina_adapter, null);
 
-            zebraBackground = !zebraBackground;
+
             View backgroundAdapter = vi.findViewById(R.id.disciplinaAdapterLayout);
-            if (zebraBackground) {
+            if(position % 2 == 0) {
                 backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorList));
             } else {
                 backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorLightList));

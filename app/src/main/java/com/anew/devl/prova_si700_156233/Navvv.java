@@ -1,5 +1,7 @@
 package com.anew.devl.prova_si700_156233;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,8 +11,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.anew.devl.prova_si700_156233.database.SyncronizeLocalServer;
 import com.anew.devl.prova_si700_156233.fragment.Bibliografia;
 import com.anew.devl.prova_si700_156233.fragment.Busca;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Navvv extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -23,7 +29,20 @@ public class Navvv extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navvvv);
 
+        init();
+    }
 
+    private void init() {
+        initDatabase();
+        initFragments();
+    }
+
+    private void initDatabase() {
+        SyncronizeLocalServer sync = new SyncronizeLocalServer();
+        sync.init(getBaseContext());
+    }
+
+    private void initFragments() {
         fragmentManager = getSupportFragmentManager();
         fragment = new Bibliografia();
 
@@ -51,6 +70,11 @@ public class Navvv extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        throw new UnsupportedOperationException("Implement on return");
     }
 
 }

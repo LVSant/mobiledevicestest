@@ -36,7 +36,6 @@ public class Bibliografia extends Fragment {
 
     private void callNewBibliografia() {
 
-
         NovaBibliografia fragment = new NovaBibliografia();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
