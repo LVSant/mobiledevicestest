@@ -14,7 +14,7 @@ import com.anew.devl.prova_si700_156233.R;
 public class Bibliografia extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bibliografia, container, false);
@@ -30,10 +30,13 @@ public class Bibliografia extends Fragment {
         });
 
 
+
         return view;
     }
 
     private void callNewBibliografia() {
+
+
         NovaBibliografia fragment = new NovaBibliografia();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

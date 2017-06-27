@@ -17,6 +17,7 @@ public class Navvv extends AppCompatActivity {
     private Fragment fragment;
     private FragmentManager fragmentManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,8 +26,10 @@ public class Navvv extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         fragment = new Bibliografia();
+
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.content_frame, fragment).commit();
+
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,12 +45,12 @@ public class Navvv extends AppCompatActivity {
                         break;
 
                 }
+
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.content_frame, fragment).commit();
                 return true;
             }
         });
     }
-
 
 }

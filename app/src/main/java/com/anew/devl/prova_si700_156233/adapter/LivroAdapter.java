@@ -3,6 +3,7 @@ package com.anew.devl.prova_si700_156233.adapter;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,12 +17,13 @@ import com.anew.devl.prova_si700_156233.R;
 import com.anew.devl.prova_si700_156233.model.Livro;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Leonardo on 18/05/17.
  */
-public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder> {
+public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder> implements Serializable{
 
     private Context mContext;
     private List<Livro> livroList;
@@ -38,6 +40,12 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             overflow = (ImageView) view.findViewById(R.id.overflow);
 
+            thumbnail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("LivroSelecionado: ", title.getText().toString());
+                }
+            });
 
         }
     }

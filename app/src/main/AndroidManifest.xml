@@ -38,11 +38,12 @@
         <activity
             android:name=".Navigation"
             android:label="@string/title_activity_bibliografias"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".Navvv"
+            android:configChanges="orientation"
             android:label="@string/title_activity_navvvv"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

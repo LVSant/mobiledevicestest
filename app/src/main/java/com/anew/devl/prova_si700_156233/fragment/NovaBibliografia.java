@@ -32,21 +32,24 @@ public class NovaBibliografia extends Fragment {
     LivroAdapter livroAdapter;
     DisciplinaAdapter disciplinaAdapter;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.novabibliografia, container, false);
 
-        initCardViewLivros(view);
-        initListDisciplina(null, view);
 
+            initListDisciplina(null, view);
+
+
+        initCardViewLivros(view);
 
 
         return view;
     }
 
-    private void initCardViewLivros(View view){
+    private void initCardViewLivros(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
 
@@ -86,6 +89,12 @@ public class NovaBibliografia extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment2);
         fragmentTransaction.commit();
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
     }
 
@@ -161,11 +170,13 @@ public class NovaBibliografia extends Fragment {
         disciplinas.add(new Disciplina(0, "Calculo A", "TADS"));
         disciplinas.add(new Disciplina(0, "Saneamento", "Engenharia Ambiental"));
         disciplinas.add(new Disciplina(0, "Redes complexas", "Engenharia Telecom"));
-        disciplinas.add(new Disciplina(0, "Engenharia de Software", "TADS"));        disciplinas.add(new Disciplina(0, "Algoritmos e Prog", "TADS"));
+        disciplinas.add(new Disciplina(0, "Engenharia de Software", "TADS"));
+        disciplinas.add(new Disciplina(0, "Algoritmos e Prog", "TADS"));
         disciplinas.add(new Disciplina(0, "Calculo A", "TADS"));
         disciplinas.add(new Disciplina(0, "Saneamento", "Engenharia Ambiental"));
         disciplinas.add(new Disciplina(0, "Redes complexas", "Engenharia Telecom"));
-        disciplinas.add(new Disciplina(0, "Engenharia de Software", "TADS"));        disciplinas.add(new Disciplina(0, "Algoritmos e Prog", "TADS"));
+        disciplinas.add(new Disciplina(0, "Engenharia de Software", "TADS"));
+        disciplinas.add(new Disciplina(0, "Algoritmos e Prog", "TADS"));
         disciplinas.add(new Disciplina(0, "Calculo A", "TADS"));
         disciplinas.add(new Disciplina(0, "Saneamento", "Engenharia Ambiental"));
         disciplinas.add(new Disciplina(0, "Redes complexas", "Engenharia Telecom"));

@@ -10,9 +10,10 @@ import android.widget.TextView;
 import com.anew.devl.prova_si700_156233.R;
 import com.anew.devl.prova_si700_156233.model.Disciplina;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DisciplinaAdapter extends BaseAdapter {
+public class DisciplinaAdapter extends BaseAdapter implements Serializable {
 
     Context context;
     List<Disciplina> data;
@@ -57,10 +58,9 @@ public class DisciplinaAdapter extends BaseAdapter {
             View backgroundAdapter = vi.findViewById(R.id.disciplinaAdapterLayout);
             if (zebraBackground) {
                 backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorList));
-            }else {
+            } else {
                 backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorLightList));
             }
-
 
 
             TextView textCurso = (TextView) vi.findViewById(R.id.curso);
