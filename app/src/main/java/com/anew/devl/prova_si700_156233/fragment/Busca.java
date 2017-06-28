@@ -5,9 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.anew.devl.prova_si700_156233.R;
@@ -20,16 +23,25 @@ import java.util.List;
 
 public class Busca extends Fragment {
 
+
+    public final static String BIBLIOGRAFIA_BUSCA = "com.anew.devl.prova_si700_156233.fragment.BibliografiaSearchSelected";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_busca, container, false);
 
-
-        BibliografiaAdapter adapter = new BibliografiaAdapter(view.getContext(), selectBibliografiasLocalDB(getContext()));
+        List<Bibliografia> bibliografias = selectBibliografiasLocalDB(getContext());
+        final BibliografiaAdapter adapter = new BibliografiaAdapter(view.getContext(), bibliografias);
 
         ListView listView = (ListView) view.findViewById(R.id.listviewBuscaBibliografia);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                callUpdateBibliografia(adapter.getItem(position));
+            }
+        });
 
         return view;
     }
@@ -44,7 +56,6 @@ public class Busca extends Fragment {
         String[] projection = {
 
                 DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO,
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA,
                 DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA,
                 DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO,
                 DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR,
@@ -70,18 +81,35 @@ public class Busca extends Fragment {
             do {
 
 
-                long idLivro = c.getLong(c.getColumnIndexOrThrow("idLivro"));
-                long idDiscplina = c.getLong(c.getColumnIndexOrThrow("idDisciplina"));
+                long idLivro = c.getLong(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO));
+                long idDiscplina = c.getLong(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA));
+                String disciplina = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA));
+                String curso = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_CURSO));
+                String autor = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR));
+                String livro = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO));
 
-                String disciplina = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA));
-                String curso = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO));
-                String autor = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR));
-                String livro = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO));
-
-                bibliografias.add(new Bibliografia(idLivro, idDiscplina, disciplina, curso, autor, livro));
+                bibliografias.add(new Bibliografia(idLivro, idDiscplina, disciplina, livro, curso, autor));
 
             } while (c.moveToNext());
         }
         return bibliografias;
+    }
+
+    private void callUpdateBibliografia(Bibliografia bibliografia) {
+
+        ShowBibliografiaFragment fragment = new ShowBibliografiaFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(BIBLIOGRAFIA_BUSCA, bibliografia);
+        fragment.setArguments(args);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.commit();
     }
 }

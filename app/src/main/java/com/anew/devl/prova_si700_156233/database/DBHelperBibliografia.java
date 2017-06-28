@@ -17,7 +17,7 @@ public class DBHelperBibliografia extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_ID_LIVRO = "idLivro";
         public static final String COLUMN_NAME_ID_DISCIPLINA = "idDisciplina";
         public static final String COLUMN_NAME_TITULO_LIVRO = "Livro";
-        public static final String COLUMN_NAME_AUTOR = "Autpr";
+        public static final String COLUMN_NAME_AUTOR = "Autor";
         public static final String COLUMN_NAME_DISCIPLINA = "Disciplina";
         public static final String COLUMN_NAME_CURSO = "Curso";
 

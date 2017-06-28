@@ -1,5 +1,6 @@
 package com.anew.devl.prova_si700_156233.database;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -404,6 +405,28 @@ public class SincronizeDatabaseLocalServer {
         return bibliografias;
     }
 
+    public boolean insertBibliografiaDBLocal(Context context, Bibliografia bibliografia) {
+
+
+        DBHelperBibliografia helper = new DBHelperBibliografia(context);
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+
+        ContentValues values = new ContentValues();
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA, bibliografia.getIdDisciplina());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO, bibliografia.getIdLivro());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR, bibliografia.getAutor());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO, bibliografia.getTituloLivro());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA, bibliografia.getNomeDisciplina());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO, bibliografia.getCurso());
+
+
+        long newRowId = db.insert(Server.TABLE_BIBLIOGRAFIA, null, values);
+
+        return (newRowId >= 1);
+
+    }
+
     private List<Bibliografia> selectBibliografiasLocalDB(Context context) {
 
         List<Bibliografia> bibliografias = new ArrayList<>();
@@ -445,26 +468,7 @@ public class SincronizeDatabaseLocalServer {
         return bibliografias;
     }
 
-    public boolean insertBibliografiaDBLocal(Context context, Bibliografia bibliografia) {
 
-
-        DBHelperBibliografia helper = new DBHelperBibliografia(context);
-        SQLiteDatabase db = helper.getWritableDatabase();
-
-
-        ContentValues values = new ContentValues();
-        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO, bibliografia.getIdLivro());
-        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR, bibliografia.getAutor());
-        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO, bibliografia.getTituloLivro());
-        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA, bibliografia.getNomeDisciplina());
-        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO, bibliografia.getCurso());
-
-
-        long newRowId = db.insert(Server.TABLE_BIBLIOGRAFIA, null, values);
-
-        return (newRowId >= 1);
-
-    }
 
 
 }

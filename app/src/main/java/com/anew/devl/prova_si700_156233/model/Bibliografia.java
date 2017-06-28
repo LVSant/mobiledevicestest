@@ -1,10 +1,12 @@
 package com.anew.devl.prova_si700_156233.model;
 
+import java.io.Serializable;
+
 /**
  * Created by devl on 6/25/17.
  */
 
-public class Bibliografia {
+public class Bibliografia implements Serializable {
     private long idLivro;
     private long idDisciplina;
     private long _id;
@@ -14,7 +16,7 @@ public class Bibliografia {
     private String autor;
 
 
-    public Bibliografia(long idLivro, long idDisciplina,  String nomeDisciplina,
+    public Bibliografia(long idLivro, long idDisciplina, String nomeDisciplina,
                         String tituloLivro, String curso, String autor) {
         this.idLivro = idLivro;
         this.idDisciplina = idDisciplina;

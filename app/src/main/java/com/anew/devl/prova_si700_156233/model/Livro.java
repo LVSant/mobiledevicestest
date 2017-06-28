@@ -9,7 +9,7 @@ public class Livro {
     private long _id;
     private String tituloLivro;
     private String autor;
-    private String image;
+    private int image;
 
     public Livro() {
     }
@@ -44,11 +44,11 @@ public class Livro {
         this.autor = autor;
     }
 
-    public String getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(int image) {
         this.image = image;
     }
 }
