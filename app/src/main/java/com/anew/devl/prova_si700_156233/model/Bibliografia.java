@@ -7,10 +7,59 @@ package com.anew.devl.prova_si700_156233.model;
 public class Bibliografia {
     private long idLivro;
     private long idDisciplina;
+    private long _id;
+    private String nomeDisciplina;
+    private String tituloLivro;
+    private String curso;
+    private String autor;
+
+
+    public Bibliografia(long idLivro, long idDisciplina,  String nomeDisciplina,
+                        String tituloLivro, String curso, String autor) {
+        this.idLivro = idLivro;
+        this.idDisciplina = idDisciplina;
+        this.nomeDisciplina = nomeDisciplina;
+        this.tituloLivro = tituloLivro;
+        this.curso = curso;
+        this.autor = autor;
+    }
 
     public Bibliografia(long idLivro, long idDisciplina) {
         this.idLivro = idLivro;
         this.idDisciplina = idDisciplina;
+    }
+
+    public String getCurso() {
+        return curso;
+    }
+
+    public void setCurso(String curso) {
+        this.curso = curso;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+
+    public String getNomeDisciplina() {
+        return nomeDisciplina;
+    }
+
+    public void setNomeDisciplina(String nomeDisciplina) {
+        this.nomeDisciplina = nomeDisciplina;
+    }
+
+    public String getTituloLivro() {
+        return tituloLivro;
+    }
+
+    public void setTituloLivro(String tituloLivro) {
+        this.tituloLivro = tituloLivro;
     }
 
     public long getIdLivro() {
@@ -28,4 +77,14 @@ public class Bibliografia {
     public void setIdDisciplina(long idDisciplina) {
         this.idDisciplina = idDisciplina;
     }
+
+    public long get_id() {
+        return _id;
+    }
+
+    public void set_id(long _id) {
+        this._id = _id;
+    }
+
+
 }

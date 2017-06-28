@@ -8,9 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.anew.devl.prova_si700_156233.database.SincronizeDatabaseLocalServer;
-import com.anew.devl.prova_si700_156233.fragment.Bibliografia;
+import com.anew.devl.prova_si700_156233.fragment.BibliografiaFragment;
 import com.anew.devl.prova_si700_156233.fragment.Busca;
 
 public class Navvv extends AppCompatActivity {
@@ -39,7 +40,7 @@ public class Navvv extends AppCompatActivity {
 
     private void initFragments() {
         fragmentManager = getSupportFragmentManager();
-        fragment = new Bibliografia();
+        fragment = new BibliografiaFragment();
 
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.content_frame, fragment).commit();
@@ -52,7 +53,7 @@ public class Navvv extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.nav_bibliografia:
-                        fragment = new Bibliografia();
+                        fragment = new BibliografiaFragment();
                         break;
                     case R.id.nav_search:
                         fragment = new Busca();
@@ -69,7 +70,8 @@ public class Navvv extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        throw new UnsupportedOperationException("Implement on return");
-    }
 
+        View viewById = findViewById(R.id.nav_bibliografia);
+        viewById.performClick();
+    }
 }

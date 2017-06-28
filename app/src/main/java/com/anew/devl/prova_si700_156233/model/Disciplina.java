@@ -18,6 +18,12 @@ public class Disciplina {
         this.curso = curso;
     }
 
+    public Disciplina( String nomeDisciplina, String curso) {
+        this._id = _id;
+        this.nomeDisciplina = nomeDisciplina;
+        this.curso = curso;
+    }
+
     public long get_id() {
         return _id;
     }

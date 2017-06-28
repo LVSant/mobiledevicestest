@@ -7,10 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,30 +19,41 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.anew.devl.prova_si700_156233.R;
 import com.anew.devl.prova_si700_156233.adapter.DisciplinaAdapter;
 import com.anew.devl.prova_si700_156233.adapter.LivroAdapter;
 import com.anew.devl.prova_si700_156233.database.DBHelperDisciplina;
 import com.anew.devl.prova_si700_156233.database.DBHelperLivro;
+import com.anew.devl.prova_si700_156233.database.SincronizeDatabaseLocalServer;
+import com.anew.devl.prova_si700_156233.model.Bibliografia;
 import com.anew.devl.prova_si700_156233.model.Disciplina;
 import com.anew.devl.prova_si700_156233.model.Livro;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NovaBibliografia extends Fragment {
+public class NovaBibliografiaFragmet extends Fragment {
 
     RecyclerView recyclerView;
     LivroAdapter livroAdapter;
     DisciplinaAdapter disciplinaAdapter;
     List<Long> idsDisciplinasSelecionadas;
+    List<Long> idsLivrosSelecionados;
+    List<Livro> livros;
+    List<Disciplina> disciplinas;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.novabibliografia, container, false);
+
+
+        initListDisciplina(view);
+        initCardViewLivros(view);
 
         Button btnNewBibliografia = (Button) view.findViewById(R.id.buttonCriarBibliografia);
         btnNewBibliografia.setOnClickListener(new View.OnClickListener() {
@@ -51,9 +63,6 @@ public class NovaBibliografia extends Fragment {
             }
         });
 
-        initListDisciplina(view);
-        initCardViewLivros(view);
-
         return view;
     }
 
@@ -61,8 +70,8 @@ public class NovaBibliografia extends Fragment {
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        List<Livro> livrosList = selectLivros(getContext());
-        livroAdapter = new LivroAdapter(this.getContext(), livrosList);
+        livros = selectLivros(getContext());
+        livroAdapter = new LivroAdapter(this.getContext(), livros);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -75,19 +84,30 @@ public class NovaBibliografia extends Fragment {
 
 
         idsDisciplinasSelecionadas = new ArrayList<>();
-        List<Disciplina> disciplinas = selectDisciplinas(getContext());
+        disciplinas = selectDisciplinas(getContext());
         this.disciplinaAdapter = new DisciplinaAdapter(this.getContext(), disciplinas);
         ListView listView = (ListView) view.findViewById(R.id.listviewDisciplinas);
         listView.setAdapter(disciplinaAdapter);
 
+        /**
+         * The ID that came from the listener, in this case long wrongIdSomehow is wrong!
+         * The approach to get the ID from the Item via the Adapter, above as
+         *
+         * long _id = disciplinaAdapter.getItem(position).get_id();
+         *
+         * seems to work!
+         * */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!idsDisciplinasSelecionadas.contains(id)) {
-                    idsDisciplinasSelecionadas.add(id);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long wrongIdSomehow) {
+
+                long _id = disciplinaAdapter.getItem(position).get_id();
+
+                if (!idsDisciplinasSelecionadas.contains(_id)) {
+                    idsDisciplinasSelecionadas.add(_id);
                     view.setBackgroundColor(getResources().getColor(R.color.colorLightList));
                 } else {
-                    idsDisciplinasSelecionadas.remove(id);
+                    idsDisciplinasSelecionadas.remove(_id);
                     view.setBackgroundColor(getResources().getColor(R.color.colorList));
                 }
             }
@@ -217,11 +237,73 @@ public class NovaBibliografia extends Fragment {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
+    private boolean validateBibliografia(List<Long> idsLivrosSelecionados, List<Long> idsDisciplinasSelecionadas) {
+        boolean isValid = true;
+        if (idsDisciplinasSelecionadas.size() != 1) {
+            toastValidateDisciplinas();
+            return false;
+        }
+
+        if (idsLivrosSelecionados.size() != 1) {
+            toastValidadeLivros();
+            return false;
+        }
+        return isValid;
+    }
 
     private void criaBib() {
         LivroAdapter adapter = (LivroAdapter) recyclerView.getAdapter();
-        List<Long> idsLivrosSelecionados = adapter.getIdsLivrosSelecionados();
+        idsLivrosSelecionados = adapter.getIdsLivrosSelecionados();
+
+        if (validateBibliografia(idsLivrosSelecionados, idsDisciplinasSelecionadas)) {
+
+            Bibliografia bib = new Bibliografia(idsLivrosSelecionados.get(0), idsDisciplinasSelecionadas.get(0));
+
+            for (Livro livro : livros) {
+                if (livro.get_id() == bib.getIdLivro()) {
+                    bib.setTituloLivro(livro.getTituloLivro());
+                    bib.setAutor(livro.getAutor());
+                }
+            }
+
+            for (Disciplina disciplina : disciplinas) {
+                if (disciplina.get_id() == bib.getIdDisciplina()) {
+                    bib.setNomeDisciplina(disciplina.getNomeDisciplina());
+                    bib.setCurso(disciplina.getCurso());
+                }
+            }
+
+            SincronizeDatabaseLocalServer s = new SincronizeDatabaseLocalServer();
+            s.insertBibliografiaDBLocal(getContext(), bib);
+
+            toastSucessoInsertBibliografia();
+            callBibliografia();
+        }
 
 
     }
+
+
+    private void toastValidateDisciplinas() {
+        Toast.makeText(getContext(), "Selecione UMA Disciplina!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void toastValidadeLivros() {
+        Toast.makeText(getContext(), "Selecione UM Livro!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void toastSucessoInsertBibliografia() {
+        Toast.makeText(getContext(), "Bibliografia salva com sucesso", Toast.LENGTH_LONG).show();
+    }
+
+    private void callBibliografia() {
+
+        BibliografiaFragment fragment = new BibliografiaFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
+
 }

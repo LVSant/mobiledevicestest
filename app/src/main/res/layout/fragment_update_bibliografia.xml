@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="0dp"
+        android:layout_height="186dp"
+
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="52dp"
+        android:id="@+id/appCompatImageView"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toStartOf="@+id/textAutor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textLivro"
+        android:layout_marginEnd="7dp" />
+
+    <TextView
+        android:id="@+id/textAutor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="17dp"
+        android:layout_marginTop="26dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Josicleiton"
+        app:layout_constraintBottom_toTopOf="@+id/textDisciplina"
+        app:layout_constraintEnd_toEndOf="@+id/textLivro"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7"
+        tools:layout_editor_absoluteX="232dp"
+        tools:layout_editor_absoluteY="90dp" />
+
+    <TextView
+        android:id="@+id/textLivro"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Manual do Mundo"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="7dp" />
+
+    <Button
+        android:id="@+id/btnUpdate"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="84dp"
+        android:background="@color/colorAccentLight"
+        android:elevation="@dimen/app_bar_height"
+        android:text="Atualizar"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="378dp"
+        android:layout_marginTop="46dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        android:layout_marginBottom="49dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/textDisciplina"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="208dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="205dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Sobrevivendo no Inferno"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appCompatImageView"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="257dp" />
+
+    <TextView
+        android:id="@+id/textCurso"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginStart="7dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Psicosinergia Avançada"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
+        app:layout_constraintEnd_toEndOf="@+id/textDisciplina"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        tools:layout_editor_absoluteX="59dp"
+        tools:layout_editor_absoluteY="313dp" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="90dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Autor(es)"
+        app:layout_constraintEnd_toEndOf="@+id/textLivro"
+        app:layout_constraintTop_toTopOf="@+id/appCompatImageView"
+        tools:layout_editor_absoluteX="232dp"
+        tools:layout_editor_absoluteY="64dp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Curso"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="313dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textDisciplina" />
+</android.support.constraint.ConstraintLayout>

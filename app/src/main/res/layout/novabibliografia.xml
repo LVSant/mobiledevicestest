@@ -50,22 +50,21 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="226dp"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/textView2"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:scrollbars="vertical"
-        tools:layout_editor_absoluteY="27dp"
-        tools:layout_editor_absoluteX="9dp"
         android:layout_marginTop="27dp"
-        android:layout_marginBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
         android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp" />
+        android:layout_marginEnd="4dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.088" />
 
     <Button
         android:id="@+id/buttonCriarBibliografia"

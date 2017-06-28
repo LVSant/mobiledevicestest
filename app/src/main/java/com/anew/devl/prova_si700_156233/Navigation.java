@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.anew.devl.prova_si700_156233.fragment.Bibliografia;
+import com.anew.devl.prova_si700_156233.fragment.BibliografiaFragment;
 import com.anew.devl.prova_si700_156233.fragment.Busca;
 
 public class Navigation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,8 +36,8 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
         switch (viewId) {
             case R.id.nav_bibliografia:
-                fragment = new Bibliografia();
-                title = "Bibliografia";
+                fragment = new BibliografiaFragment();
+                title = "BibliografiaFragment";
                 viewIsAtHome = true;
                 break;
 

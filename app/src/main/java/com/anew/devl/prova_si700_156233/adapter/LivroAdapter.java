@@ -37,10 +37,7 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             overflow = (ImageView) view.findViewById(R.id.overflow);
         }
-
-
     }
-
 
     public LivroAdapter(Context mContext, List<Livro> livroList) {
         this.mContext = mContext;
@@ -53,14 +50,14 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.livro_card, parent, false);
 
-
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final LivroAdapter.MyViewHolder viewHolder, final int i) {
 
-        String[] livros = {"http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
+        //TODO Remove this approach for a better one later
+        String[] livrosImagesStub = {"http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
                 "http://www.livroandroid.com.br/site/imgs/livro_android.png",
                 "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
                 "http://www.training.com.br/aso/capa4.jpg",
@@ -84,9 +81,9 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
         viewHolder.title.setText(livroList.get(i).getTituloLivro());
         viewHolder.count.setText(livroList.get(i).getAutor());
 
-        //load album cover using picasso
+        //load album cover using Picasso! take a look at https://github.com/square/picasso
         Picasso.with(mContext)
-                .load(livros[i])
+                .load(livrosImagesStub[i])
                 .placeholder(R.drawable.ic_loading)
                 .into(viewHolder.thumbnail);
 
@@ -94,8 +91,6 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
         viewHolder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
                 long livroId = livroList.get(i).get_id();
 

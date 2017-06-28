@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.anew.devl.prova_si700_156233.database.serverdata.SelectBibliografia;
 import com.anew.devl.prova_si700_156233.database.serverdata.SelectDisciplina;
 import com.anew.devl.prova_si700_156233.database.serverdata.SelectLivro;
 import com.anew.devl.prova_si700_156233.database.serverdata.Server;
+import com.anew.devl.prova_si700_156233.model.Bibliografia;
 import com.anew.devl.prova_si700_156233.model.Disciplina;
 import com.anew.devl.prova_si700_156233.model.Livro;
 
@@ -30,13 +32,17 @@ public class SincronizeDatabaseLocalServer {
     public static final String COLUMN_NAME_AUTOR = "Autor";
     public static final String COLUMN_NAME_NOME_DISCIPLINA = "NomeDisciplina";
     public static final String COLUMN_NAME_CURSO = "Curso";
+    private List<Livro> livrosDBLOcal;
+    private List<Disciplina> disciplinasDBLocal;
 
 
     public void init(Context context) {
+        cleanDB(context);
+
         initLivro(context);
         initDisciplina(context);
+        initBibliografia(context);
 
-    //    cleanDB(context);
     }
 
     /**
@@ -53,6 +59,10 @@ public class SincronizeDatabaseLocalServer {
         SQLiteDatabase dbDisciplina = helperDisciplina.getWritableDatabase();
         helperDisciplina.onDropAll(dbDisciplina);
 
+
+        DBHelperBibliografia helperBibliografia = new DBHelperBibliografia(context);
+        SQLiteDatabase dbBibliografia = helperBibliografia.getWritableDatabase();
+        helperBibliografia.onDropAll(dbBibliografia);
     }
 
 
@@ -80,7 +90,7 @@ public class SincronizeDatabaseLocalServer {
          * Approach for sincronizing the local database with the server data, by the "_id" field
          * */
         List<Livro> livrosServidor = livroJson2List(result);
-        List<Livro> livrosDBLOcal = selectLivrosLocalDB(context);
+        livrosDBLOcal = selectLivrosLocalDB(context);
         List<Long> idsDBLocal = new ArrayList<>();
 
 
@@ -141,31 +151,31 @@ public class SincronizeDatabaseLocalServer {
     private List<Livro> livroJson2List(String result) {
         ArrayList<Livro> livros = new ArrayList<>();
 
+        if (result != null && !result.isEmpty()) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                for (int i = 0; i < jsonArray.length(); i++) {
 
-        try {
-            JSONArray jsonArray = new JSONArray(result);
-            for (int i = 0; i < jsonArray.length(); i++) {
 
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    long idLivro = jsonObject.getLong("idLivro");
+                    String tituloLivro = jsonObject.getString("TituloLivro");
+                    String exemplares = jsonObject.getString("Exemplares");
 
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                long idLivro = jsonObject.getLong("idLivro");
-                String tituloLivro = jsonObject.getString("TituloLivro");
-                String exemplares = jsonObject.getString("Exemplares");
+                    if (tituloLivro == null) {
+                        tituloLivro = "vazio";
+                    }
+                    if (exemplares == null) {
+                        exemplares = "vazio";
+                    }
 
-                if (tituloLivro == null) {
-                    tituloLivro = "vazio";
+                    Livro livro = new Livro(idLivro, tituloLivro, exemplares);
+                    livros.add(livro);
                 }
-                if (exemplares == null) {
-                    exemplares = "vazio";
-                }
-
-                Livro livro = new Livro(idLivro, tituloLivro, exemplares);
-                livros.add(livro);
+            } catch (JSONException exception) {
+                exception.printStackTrace();
             }
-        } catch (JSONException exception) {
-            exception.printStackTrace();
         }
-
         return livros;
     }
 
@@ -210,7 +220,7 @@ public class SincronizeDatabaseLocalServer {
         }
 
         List<Disciplina> disciplinasServidor = disciplinaJson2List(result);
-        List<Disciplina> disciplinasDBLocal = selectDisciplinasLocalDB(context);
+        disciplinasDBLocal = selectDisciplinasLocalDB(context);
         List<Long> idsDBLocal = new ArrayList<>();
 
 
@@ -227,28 +237,30 @@ public class SincronizeDatabaseLocalServer {
 
     private List<Disciplina> disciplinaJson2List(String result) {
         ArrayList<Disciplina> disciplinas = new ArrayList<>();
-        try {
-            JSONArray jsonArray = new JSONArray(result);
-            for (int i = 0; i < jsonArray.length(); i++) {
+        if (result != null && !result.isEmpty()) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                for (int i = 0; i < jsonArray.length(); i++) {
 
 
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                long idDisciplina = jsonObject.getLong("idDisciplina");
-                String nomeDisciplina = jsonObject.getString("NomeDisciplina");
-                String curso = jsonObject.getString("Curso");
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    long idDisciplina = jsonObject.getLong("idDisciplina");
+                    String nomeDisciplina = jsonObject.getString("NomeDisciplina");
+                    String curso = jsonObject.getString("Curso");
 
-                if (nomeDisciplina == null) {
-                    nomeDisciplina = "vazio";
+                    if (nomeDisciplina == null) {
+                        nomeDisciplina = "vazio";
+                    }
+                    if (curso == null) {
+                        curso = "vazio";
+                    }
+
+                    Disciplina disciplina = new Disciplina(idDisciplina, nomeDisciplina, curso);
+                    disciplinas.add(disciplina);
                 }
-                if (curso == null) {
-                    curso = "vazio";
-                }
-
-                Disciplina disciplina = new Disciplina(idDisciplina, nomeDisciplina, curso);
-                disciplinas.add(disciplina);
+            } catch (JSONException exception) {
+                exception.printStackTrace();
             }
-        } catch (JSONException exception) {
-            exception.printStackTrace();
         }
 
         return disciplinas;
@@ -313,4 +325,146 @@ public class SincronizeDatabaseLocalServer {
         return (newRowId >= 1);
 
     }
+
+    private void initBibliografia(Context context) {
+
+        String[] fields = {""};
+        String[] values = {""};
+
+
+        AsyncTask<Void, Void, String> retornoSelectBibliografia = null;
+        String result = null;
+        SelectBibliografia selectBibliografia = new SelectBibliografia(fields, values);
+        try {
+            retornoSelectBibliografia = selectBibliografia.execute();
+            result = retornoSelectBibliografia.get();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        List<Bibliografia> bibliografiasServidor = bibliografiaJson2List(result);
+       /* List<Bibliografia> bibliografiasDBLocal = selectBibliografiasLocalDB(context);
+        List<Long> idsDBLocal = new ArrayList<>();
+*/
+
+        /*for (Bibliografia bib : bibliografiasDBLocal) {
+            idsDBLocal.add(bib.get_id());
+        }
+*/
+        for (Bibliografia bibliografiaServidor : bibliografiasServidor) {
+
+
+            for (Livro livro : selectLivrosLocalDB(context)) {
+                if (bibliografiaServidor.getIdLivro() == livro.get_id()) {
+                    bibliografiaServidor.setTituloLivro(livro.getTituloLivro());
+                    bibliografiaServidor.setAutor(livro.getAutor());
+
+                }
+            }
+
+            for (Disciplina disciplina : selectDisciplinasLocalDB(context)) {
+                if (bibliografiaServidor.getIdDisciplina() == disciplina.get_id()) {
+                    bibliografiaServidor.setNomeDisciplina(disciplina.getNomeDisciplina());
+                    bibliografiaServidor.setCurso(disciplina.getCurso());
+                }
+
+            }
+
+
+            insertBibliografiaDBLocal(context, bibliografiaServidor);
+
+        }
+    }
+
+    private List<Bibliografia> bibliografiaJson2List(String result) {
+        ArrayList<Bibliografia> bibliografias = new ArrayList<>();
+        if (result != null && !result.isEmpty()) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    long idLivro = jsonObject.getLong("idLivro");
+                    long idDisciplina = jsonObject.getLong("idDisciplina");
+
+
+                    Bibliografia Bibliografia = new Bibliografia(idLivro, idDisciplina);
+                    bibliografias.add(Bibliografia);
+                }
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        return bibliografias;
+    }
+
+    private List<Bibliografia> selectBibliografiasLocalDB(Context context) {
+
+        List<Bibliografia> bibliografias = new ArrayList<>();
+        DBHelperBibliografia helper = new DBHelperBibliografia(context);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+
+        String[] projection = {
+                DBHelperBibliografia.DBHelperBibliografiaColumns._ID,
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO,
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA
+        };
+
+
+        String sortByAdd =
+                DBHelperBibliografia.DBHelperBibliografiaColumns._ID + " DESC ";
+
+        Cursor c = db.query(
+                DBHelperBibliografia.DBHelperBibliografiaColumns.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                null,                                     // The columns for the WHERE clause
+                null,                                     // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortByAdd                                 // The sort order
+        );
+
+        if (c.moveToFirst()) {
+            do {
+
+                long id = c.getLong(c.getColumnIndexOrThrow("_id"));
+                long idLivro = c.getLong(c.getColumnIndexOrThrow("idLivro"));
+                long idDiscplina = c.getLong(c.getColumnIndexOrThrow("idDisciplina"));
+
+                bibliografias.add(new Bibliografia(idLivro, idDiscplina));
+
+            } while (c.moveToNext());
+        }
+        return bibliografias;
+    }
+
+    public boolean insertBibliografiaDBLocal(Context context, Bibliografia bibliografia) {
+
+
+        DBHelperBibliografia helper = new DBHelperBibliografia(context);
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+
+        ContentValues values = new ContentValues();
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO, bibliografia.getIdLivro());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR, bibliografia.getAutor());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO, bibliografia.getTituloLivro());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA, bibliografia.getNomeDisciplina());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO, bibliografia.getCurso());
+
+
+        long newRowId = db.insert(Server.TABLE_BIBLIOGRAFIA, null, values);
+
+        return (newRowId >= 1);
+
+    }
+
+
 }
