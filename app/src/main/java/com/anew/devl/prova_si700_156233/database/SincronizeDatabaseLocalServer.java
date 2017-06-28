@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.anew.devl.prova_si700_156233.database.serverdata.SelectDisciplina;
 import com.anew.devl.prova_si700_156233.database.serverdata.SelectLivro;
@@ -26,7 +25,7 @@ import java.util.concurrent.ExecutionException;
  * Created by devl on 6/27/17.
  */
 
-public class SyncronizeLocalServer {
+public class SincronizeDatabaseLocalServer {
     public static final String COLUMN_NAME_TITULO_LIVRO = "TituloLivro";
     public static final String COLUMN_NAME_AUTOR = "Autor";
     public static final String COLUMN_NAME_NOME_DISCIPLINA = "NomeDisciplina";
@@ -37,9 +36,12 @@ public class SyncronizeLocalServer {
         initLivro(context);
         initDisciplina(context);
 
-        //cleanDB(context);
+    //    cleanDB(context);
     }
 
+    /**
+     * Responsible for cleaning up the database for the new sync
+     */
     private void cleanDB(Context context) {
 
         DBHelperLivro helperLivro = new DBHelperLivro(context);
@@ -52,6 +54,7 @@ public class SyncronizeLocalServer {
         helperDisciplina.onDropAll(dbDisciplina);
 
     }
+
 
     private void initLivro(Context context) {
 
@@ -73,6 +76,9 @@ public class SyncronizeLocalServer {
         }
 
 
+        /*
+         * Approach for sincronizing the local database with the server data, by the "_id" field
+         * */
         List<Livro> livrosServidor = livroJson2List(result);
         List<Livro> livrosDBLOcal = selectLivrosLocalDB(context);
         List<Long> idsDBLocal = new ArrayList<>();
@@ -87,7 +93,6 @@ public class SyncronizeLocalServer {
             if (!idsDBLocal.contains(livro.get_id()))
                 insertLivroDBLOcal(context, livro);
         }
-
 
 
     }
@@ -173,6 +178,7 @@ public class SyncronizeLocalServer {
 
 
         ContentValues values = new ContentValues();
+        values.put(DBHelperLivro.DBHelperLivroColumns._ID, livro.get_id());
         values.put(COLUMN_NAME_AUTOR, livro.getAutor());
         values.put(COLUMN_NAME_TITULO_LIVRO, livro.getTituloLivro());
 
@@ -291,7 +297,7 @@ public class SyncronizeLocalServer {
 
     private boolean insertDisciplinaDBLocal(Context context, Disciplina disciplina) {
 
-        /*Insert na table Disciplina*/
+
         DBHelperDisciplina helper = new DBHelperDisciplina(context);
         SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -302,7 +308,6 @@ public class SyncronizeLocalServer {
         values.put(COLUMN_NAME_CURSO, disciplina.getCurso());
 
 
-        //insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(Server.TABLE_DISCIPLINA, null, values);
 
         return (newRowId >= 1);

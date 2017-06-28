@@ -10,10 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.anew.devl.prova_si700_156233.R;
@@ -32,12 +35,21 @@ public class NovaBibliografia extends Fragment {
     RecyclerView recyclerView;
     LivroAdapter livroAdapter;
     DisciplinaAdapter disciplinaAdapter;
+    List<Long> idsDisciplinasSelecionadas;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.novabibliografia, container, false);
+
+        Button btnNewBibliografia = (Button) view.findViewById(R.id.buttonCriarBibliografia);
+        btnNewBibliografia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                criaBib();
+            }
+        });
 
         initListDisciplina(view);
         initCardViewLivros(view);
@@ -46,32 +58,40 @@ public class NovaBibliografia extends Fragment {
     }
 
     private void initCardViewLivros(View view) {
+
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-
         List<Livro> livrosList = selectLivros(getContext());
-
         livroAdapter = new LivroAdapter(this.getContext(), livrosList);
-
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-
         recyclerView.setAdapter(livroAdapter);
 
     }
 
-
     private void initListDisciplina(View view) {
 
+
+        idsDisciplinasSelecionadas = new ArrayList<>();
         List<Disciplina> disciplinas = selectDisciplinas(getContext());
-
         this.disciplinaAdapter = new DisciplinaAdapter(this.getContext(), disciplinas);
-
         ListView listView = (ListView) view.findViewById(R.id.listviewDisciplinas);
         listView.setAdapter(disciplinaAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!idsDisciplinasSelecionadas.contains(id)) {
+                    idsDisciplinasSelecionadas.add(id);
+                    view.setBackgroundColor(getResources().getColor(R.color.colorLightList));
+                } else {
+                    idsDisciplinasSelecionadas.remove(id);
+                    view.setBackgroundColor(getResources().getColor(R.color.colorList));
+                }
+            }
+        });
     }
 
     private List<Livro> selectLivros(Context context) {
@@ -86,8 +106,6 @@ public class NovaBibliografia extends Fragment {
                 DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_AUTOR
         };
 
-
-        //String selection =  DBHelper.VeiculoDBHelper;
         String sortByAdd =
                 DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_TITULO_LIVRO + " DESC ";
 
@@ -103,11 +121,10 @@ public class NovaBibliografia extends Fragment {
 
         if (c.moveToFirst()) {
             do {
-                //id, name, marca, preco, adicionado
+
                 long id = c.getLong(c.getColumnIndexOrThrow("_id"));
                 String tituloLivro = c.getString(c.getColumnIndexOrThrow("TituloLivro"));
                 String autor = c.getString(c.getColumnIndexOrThrow("Autor"));
-
 
                 livros.add(new Livro(id, tituloLivro, autor));
 
@@ -117,7 +134,6 @@ public class NovaBibliografia extends Fragment {
     }
 
     private List<Disciplina> selectDisciplinas(Context context) {
-
 
         List<Disciplina> disciplinas = new ArrayList<>();
         DBHelperDisciplina helper = new DBHelperDisciplina(context);
@@ -201,4 +217,11 @@ public class NovaBibliografia extends Fragment {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
+
+    private void criaBib() {
+        LivroAdapter adapter = (LivroAdapter) recyclerView.getAdapter();
+        List<Long> idsLivrosSelecionados = adapter.getIdsLivrosSelecionados();
+
+
+    }
 }

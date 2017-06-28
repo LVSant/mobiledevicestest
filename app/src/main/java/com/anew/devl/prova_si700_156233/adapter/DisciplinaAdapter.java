@@ -54,14 +54,8 @@ public class DisciplinaAdapter extends BaseAdapter implements Serializable {
         if (vi == null) {
             vi = inflater.inflate(R.layout.disciplina_adapter, null);
 
-
             View backgroundAdapter = vi.findViewById(R.id.disciplinaAdapterLayout);
-            if(position % 2 == 0) {
-                backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorList));
-            } else {
-                backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorLightList));
-            }
-
+            backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorList));
 
             TextView textCurso = (TextView) vi.findViewById(R.id.curso);
             textCurso.setText(data.get(position).getCurso());
