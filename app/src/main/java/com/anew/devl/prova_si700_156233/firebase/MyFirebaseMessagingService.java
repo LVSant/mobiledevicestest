@@ -26,7 +26,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.anew.devl.prova_si700_156233.MainActivity;
+import com.anew.devl.prova_si700_156233.Navvv;
 import com.anew.devl.prova_si700_156233.R;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
@@ -88,10 +88,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
         // Check if message contains a data payload.
         if (data.size() > 0) {
-            Log.d(TAG, "Message data payload: " + data);
-            Log.d(TAG, "_id " + data.get("_id"));
+            //Log.d(TAG, "Message data payload: " + data);
+            //Log.d(TAG, "_id " + data.get("_id"));
 
-            sendNotification(data.toString());
+            sendBroadcast(data.get("_id"));
+            //sendNotification(data.toString());
         }
 
 
@@ -128,7 +129,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this,Navvv.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

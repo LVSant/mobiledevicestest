@@ -1,18 +1,25 @@
 package com.anew.devl.prova_si700_156233;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.anew.devl.prova_si700_156233.database.SincronizeDatabaseLocalServer;
 import com.anew.devl.prova_si700_156233.fragment.BibliografiaFragment;
 import com.anew.devl.prova_si700_156233.fragment.Busca;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Navvv extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -24,12 +31,14 @@ public class Navvv extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navvvv);
+        setTitle("Bibliografia Manager");
 
         init();
     }
 
     private void init() {
-        initDatabase();
+        //initDatabase();
+        initFirebase();
         initFragments();
     }
 
@@ -73,5 +82,23 @@ public class Navvv extends AppCompatActivity {
 
         View viewById = findViewById(R.id.nav_bibliografia);
         viewById.performClick();
+        super.onBackPressed();
     }
+
+    private BroadcastReceiver myBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("FB MESSAGE", intent.getStringExtra("message"));
+            initDatabase();
+        }
+    };
+
+    private void initFirebase() {
+        FirebaseMessaging.getInstance().subscribeToTopic("bibliografia");
+        IntentFilter myFilter = new IntentFilter("MyServiceBroadcast");
+        LocalBroadcastManager.getInstance(this).registerReceiver(myBroadcastReceiver, myFilter);
+
+    }
+
 }

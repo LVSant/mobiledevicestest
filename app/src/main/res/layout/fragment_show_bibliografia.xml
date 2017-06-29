@@ -9,19 +9,17 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="66dp"
+        android:layout_width="0dp"
         android:layout_height="21dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="16dp"
         android:fontFamily="sans-serif"
         android:text="Disciplina:"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textDisciplina"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteY="245dp"
+        tools:layout_editor_absoluteX="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView8"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
+        app:layout_constraintStart_toStartOf="@+id/textLivro"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/livroThumbnail"
@@ -31,11 +29,11 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="76dp"
         app:layout_constraintEnd_toStartOf="@+id/textAutor"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/textDisciplina"
         app:layout_constraintTop_toTopOf="@+id/textView7"
         app:layout_constraintStart_toStartOf="@+id/textLivro"
-        android:layout_marginEnd="4dp" />
+        android:layout_marginEnd="10dp" />
 
     <TextView
         android:id="@+id/textAutor"
@@ -43,14 +41,13 @@
         android:layout_height="0dp"
         android:fontFamily="@font/architects_daughter"
         android:text="Josicleiton"
+        tools:layout_editor_absoluteX="216dp"
         tools:layout_editor_absoluteY="105dp"
-        tools:layout_editor_absoluteX="207dp"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
-        android:layout_marginBottom="2dp"
-        app:layout_constraintEnd_toEndOf="@+id/textLivro"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/textDisciplina"
         app:layout_constraintStart_toStartOf="@+id/textView7"
-        app:layout_constraintBottom_toBottomOf="@+id/livroThumbnail"
-        android:layout_marginEnd="2dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/livroThumbnail" />
 
     <TextView
         android:id="@+id/textLivro"
@@ -62,7 +59,7 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/livroThumbnail"
         app:layout_constraintTop_toTopOf="parent"
@@ -73,36 +70,49 @@
     <Button
         android:id="@+id/btnUpdateShowBibliografia"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="0dp"
-        android:layout_height="84dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:background="@color/colorAccentLight"
         android:elevation="@dimen/app_bar_height"
         android:text="Atualizar"
-        tools:layout_editor_absoluteY="369dp"
-        tools:layout_editor_absoluteX="0dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginBottom="58dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnDeleteShowBibliografia"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textCurso"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textCurso"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="365dp" />
+
+    <Button
+        android:id="@+id/btnDeleteShowBibliografia"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="58dp"
+        android:layout_marginTop="56dp"
+        android:background="@android:color/holo_red_light"
+        android:elevation="@dimen/app_bar_height"
+        android:text="REMOVER"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textCurso"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="413dp" />
 
     <TextView
         android:id="@+id/textDisciplina"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="56dp"
         android:fontFamily="@font/architects_daughter"
         android:text="Sobrevivendo no Inferno"
         android:textSize="18sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="115dp"
+        tools:layout_editor_absoluteX="96dp"
         tools:layout_editor_absoluteY="241dp"
-        android:layout_marginTop="13dp"
-        app:layout_constraintTop_toBottomOf="@+id/livroThumbnail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/textCurso"
-        app:layout_constraintStart_toStartOf="@+id/textCurso"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="@+id/textCurso" />
 
     <TextView
         android:id="@+id/textCurso"
@@ -112,14 +122,13 @@
         android:text="Psicosinergia Avançada"
         android:textSize="18sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="115dp"
-        tools:layout_editor_absoluteY="301dp"
-        android:layout_marginTop="34dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        tools:layout_editor_absoluteX="97dp"
+        tools:layout_editor_absoluteY="297dp"
+        app:layout_constraintTop_toBottomOf="@+id/textDisciplina"
         app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="10dp" />
+        app:layout_constraintEnd_toEndOf="@+id/textLivro"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp" />
 
     <TextView
         android:id="@+id/textView7"
@@ -129,25 +138,26 @@
         android:text="Autor(es):"
         android:textSize="18sp"
         tools:layout_editor_absoluteY="76dp"
-        tools:layout_editor_absoluteX="207dp"
-        android:layout_marginTop="76dp"
-        app:layout_constraintEnd_toEndOf="@+id/btnUpdateShowBibliografia"
+        tools:layout_editor_absoluteX="216dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textDisciplina"
-        android:layout_marginStart="92dp"
-        android:layout_marginEnd="92dp" />
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="71dp"
+        app:layout_constraintEnd_toEndOf="@+id/textLivro" />
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="54dp"
-        android:layout_height="28dp"
+        android:layout_width="55dp"
+        android:layout_height="25dp"
         android:fontFamily="sans-serif"
         android:text="Curso:"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="301dp"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteY="297dp"
+        tools:layout_editor_absoluteX="41dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textCurso"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="31dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textCurso"
+        android:layout_marginStart="41dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        android:layout_marginBottom="35dp" />
 
 </android.support.constraint.ConstraintLayout>

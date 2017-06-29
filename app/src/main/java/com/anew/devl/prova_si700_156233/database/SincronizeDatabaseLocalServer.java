@@ -38,7 +38,7 @@ public class SincronizeDatabaseLocalServer {
 
 
     public void init(Context context) {
-        cleanDB(context);
+        //cleanDB(context);
 
         initLivro(context);
         initDisciplina(context);

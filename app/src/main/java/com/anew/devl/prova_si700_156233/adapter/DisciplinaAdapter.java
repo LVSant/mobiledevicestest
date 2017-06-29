@@ -1,6 +1,7 @@
 package com.anew.devl.prova_si700_156233.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,14 @@ public class DisciplinaAdapter extends BaseAdapter implements Serializable {
     List<Disciplina> data;
     private static LayoutInflater inflater = null;
 
+    class DisciplinaAdapterHolder {
+        TextView textCurso, textDisciplina;
+
+        public DisciplinaAdapterHolder(View v) {
+            textCurso = (TextView) v.findViewById(R.id.curso);
+            textDisciplina = (TextView) v.findViewById(R.id.nomeDisciplina);
+        }
+    }
 
     public DisciplinaAdapter(Context context, List<Disciplina> Disciplinas) {
         // TODO Auto-generated constructor stub
@@ -49,23 +58,25 @@ public class DisciplinaAdapter extends BaseAdapter implements Serializable {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
+
         View vi = convertView;
+        DisciplinaAdapterHolder holder;
         if (vi == null) {
             vi = inflater.inflate(R.layout.disciplina_adapter, null);
-
-            View backgroundAdapter = vi.findViewById(R.id.disciplinaAdapterLayout);
-            backgroundAdapter.setBackgroundColor(vi.getResources().getColor(R.color.colorList));
-
-            TextView textCurso = (TextView) vi.findViewById(R.id.curso);
-            textCurso.setText(data.get(position).getCurso());
-
-            TextView textDisciplina = (TextView) vi.findViewById(R.id.nomeDisciplina);
-            textDisciplina.setText(data.get(position).getNomeDisciplina());
-
+            holder = new DisciplinaAdapterHolder(vi);
+            vi.setTag(holder);
+        } else {
+            holder = (DisciplinaAdapterHolder) vi.getTag();
         }
+
+
+        Disciplina disciplina = data.get(position);
+        holder.textCurso.setText(disciplina.getCurso());
+        holder.textDisciplina.setText(disciplina.getNomeDisciplina());
+
         return vi;
     }
+
 
 
 }

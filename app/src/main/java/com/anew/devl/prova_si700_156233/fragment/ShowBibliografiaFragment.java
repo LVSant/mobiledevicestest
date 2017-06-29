@@ -1,6 +1,8 @@
 package com.anew.devl.prova_si700_156233.fragment;
 
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anew.devl.prova_si700_156233.R;
+import com.anew.devl.prova_si700_156233.database.DBHelperBibliografia;
 import com.anew.devl.prova_si700_156233.model.Bibliografia;
 import com.squareup.picasso.Picasso;
 
@@ -56,6 +59,7 @@ public class ShowBibliografiaFragment extends Fragment {
                 .placeholder(R.drawable.ic_loading)
                 .into((ImageView) view.findViewById(R.id.livroThumbnail));
 
+
         Button btnUpdate = (Button) view.findViewById(R.id.btnUpdateShowBibliografia);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +75,49 @@ public class ShowBibliografiaFragment extends Fragment {
             }
         });
 
+        Button btnRemover = (Button) view.findViewById(R.id.btnDeleteShowBibliografia);
+        btnRemover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRemover();
+            }
+        });
+
 
         return view;
     }
 
+    private void onRemover() {
 
+        deleteBibliografiaDBLocal(getContext(), bibliografia);
+        Busca fragment = new Busca();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
+
+    private int deleteBibliografiaDBLocal(Context context, Bibliografia bibliografiaUpdate) {
+
+        DBHelperBibliografia helper = new DBHelperBibliografia(context);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String[] args = {
+                bibliografiaUpdate.getIdLivro() + "",
+                bibliografiaUpdate.getIdDisciplina() + ""
+        };
+        String whereClause = "idLivro=? AND idDisciplina=?";
+
+        return db.delete(
+                DBHelperBibliografia.DBHelperBibliografiaColumns.TABLE_NAME,                     // The table to query
+                whereClause,         // The columns for the WHERE clause
+                args                                     // The values for the WHERE clause
+        );
+
+
+    }
 }
+
+

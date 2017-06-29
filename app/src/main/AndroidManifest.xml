@@ -34,11 +34,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MainActivity" />
-        <activity
-            android:name=".Navigation"
-            android:label="@string/title_activity_bibliografias"
-            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".Navvv"
             android:configChanges="orientation"

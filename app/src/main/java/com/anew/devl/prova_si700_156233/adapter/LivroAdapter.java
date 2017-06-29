@@ -36,7 +36,7 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+
         }
     }
 
@@ -62,7 +62,7 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
         viewHolder.count.setText(livroList.get(i).getAutor());
 
         String bookThumbnail = livroList.get(i).getImage();
-        Log.d("THUMBBAIL LOADED", bookThumbnail);
+        Log.d("BookThumbnailLoaded: ", bookThumbnail);
 
         //load album cover using Picasso! take a look at https://github.com/square/picasso
         Picasso.with(mContext)

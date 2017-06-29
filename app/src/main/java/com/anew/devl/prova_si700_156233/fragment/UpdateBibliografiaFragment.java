@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +62,7 @@ public class UpdateBibliografiaFragment extends Fragment {
 
         Bundle arguments = getArguments();
         bibliografiaUpdate = (Bibliografia) arguments.get(BIBLIOGRAFIA_BUSCA);
-        Log.d("ON UPDATE", "BIB LIVRO: "+bibliografiaUpdate.getImageLivro());
+
 
         btnUpdateBibliografia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,22 +235,12 @@ public class UpdateBibliografiaFragment extends Fragment {
         if (validateBibliografia(idsLivrosSelecionados, idsDisciplinasSelecionadas)) {
 
 
-            List<Bibliografia> bibliografias = selectBibliografiasLocalDB(getContext());
-            for (Bibliografia bibliografia : bibliografias) {
-                Log.d("AntesUpdate", "curso " + bibliografia.getCurso() + " livro " + bibliografia.getTituloLivro());
-            }
-
-            Log.d("bibliografiaUpdate", "curso: " + bibliografiaUpdate.getCurso() + " livro " + bibliografiaUpdate.getTituloLivro());
-
             int i = updateBibliografiaLocalDB(getContext(), bibliografiaUpdate);
-            Log.d("AATUALIZOU", "Total: " + i);
-            toastSucessoInsertBibliografia();
 
+            toastSucessoUpdateBibliografia();
 
-            bibliografias = selectBibliografiasLocalDB(getContext());
-            for (Bibliografia bibliografia : bibliografias) {
-                Log.d("DepoisUpdate", "curso " + bibliografia.getCurso() + " livro " + bibliografia.getTituloLivro());
-            }
+            callBusca();
+
 
         }
     }
@@ -313,12 +302,8 @@ public class UpdateBibliografiaFragment extends Fragment {
         return s.selectBibliografiasLocalDB(context);
     }
 
-    private void callUpdateBibliografia(Bibliografia bibliografia) {
-
-        ShowBibliografiaFragment fragment = new ShowBibliografiaFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(BIBLIOGRAFIA_BUSCA, bibliografia);
-        fragment.setArguments(args);
+    private void callBusca() {
+        Busca fragment = new Busca();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment);
@@ -333,7 +318,7 @@ public class UpdateBibliografiaFragment extends Fragment {
         Toast.makeText(getContext(), "Selecione UM Livro!", Toast.LENGTH_SHORT).show();
     }
 
-    private void toastSucessoInsertBibliografia() {
+    private void toastSucessoUpdateBibliografia() {
         Toast.makeText(getContext(), "Bibliografia atualizada com sucesso", Toast.LENGTH_LONG).show();
     }
 

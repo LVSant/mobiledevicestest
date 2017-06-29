@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -42,6 +43,7 @@ public class NovaBibliografiaFragmet extends Fragment {
     List<Long> idsLivrosSelecionados;
     List<Livro> livros;
     List<Disciplina> disciplinas;
+
 
 
     @Override
@@ -107,7 +109,7 @@ public class NovaBibliografiaFragmet extends Fragment {
                     view.setBackgroundColor(getResources().getColor(R.color.colorLightList));
                 } else {
                     idsDisciplinasSelecionadas.remove(_id);
-                    view.setBackgroundColor(getResources().getColor(R.color.colorList));
+                    view.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
                 }
             }
         });
