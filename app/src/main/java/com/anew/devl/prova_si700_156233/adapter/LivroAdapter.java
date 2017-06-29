@@ -2,6 +2,7 @@ package com.anew.devl.prova_si700_156233.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,34 +57,16 @@ public class LivroAdapter extends RecyclerView.Adapter<LivroAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(final LivroAdapter.MyViewHolder viewHolder, final int i) {
 
-        //TODO Remove this approach for a better one later
-        String[] livrosImagesStub = {"http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg"};
 
         viewHolder.title.setText(livroList.get(i).getTituloLivro());
         viewHolder.count.setText(livroList.get(i).getAutor());
 
+        String bookThumbnail = livroList.get(i).getImage();
+        Log.d("THUMBBAIL LOADED", bookThumbnail);
+
         //load album cover using Picasso! take a look at https://github.com/square/picasso
         Picasso.with(mContext)
-                .load(livrosImagesStub[i])
+                .load(bookThumbnail)
                 .placeholder(R.drawable.ic_loading)
                 .into(viewHolder.thumbnail);
 

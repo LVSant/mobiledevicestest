@@ -28,7 +28,7 @@ import com.anew.devl.prova_si700_156233.adapter.DisciplinaAdapter;
 import com.anew.devl.prova_si700_156233.adapter.LivroAdapter;
 import com.anew.devl.prova_si700_156233.database.DBHelperBibliografia;
 import com.anew.devl.prova_si700_156233.database.DBHelperDisciplina;
-import com.anew.devl.prova_si700_156233.database.DBHelperLivro;
+import com.anew.devl.prova_si700_156233.database.SincronizeDatabaseLocalServer;
 import com.anew.devl.prova_si700_156233.model.Bibliografia;
 import com.anew.devl.prova_si700_156233.model.Disciplina;
 import com.anew.devl.prova_si700_156233.model.Livro;
@@ -55,7 +55,6 @@ public class UpdateBibliografiaFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.novabibliografia, container, false);
 
-
         initListDisciplina(view);
         initCardViewLivros(view);
 
@@ -64,6 +63,7 @@ public class UpdateBibliografiaFragment extends Fragment {
 
         Bundle arguments = getArguments();
         bibliografiaUpdate = (Bibliografia) arguments.get(BIBLIOGRAFIA_BUSCA);
+        Log.d("ON UPDATE", "BIB LIVRO: "+bibliografiaUpdate.getImageLivro());
 
         btnUpdateBibliografia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,41 +125,9 @@ public class UpdateBibliografiaFragment extends Fragment {
 
     private List<Livro> selectLivros(Context context) {
 
-        List<Livro> livros = new ArrayList<>();
-        DBHelperLivro helper = new DBHelperLivro(context);
-        SQLiteDatabase db = helper.getReadableDatabase();
+        SincronizeDatabaseLocalServer s = new SincronizeDatabaseLocalServer();
+        return s.selectLivrosLocalDB(context);
 
-        String[] projection = {
-                DBHelperLivro.DBHelperLivroColumns._ID,
-                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_TITULO_LIVRO,
-                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_AUTOR
-        };
-
-        String sortByAdd =
-                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_TITULO_LIVRO + " DESC ";
-
-        Cursor c = db.query(
-                DBHelperLivro.DBHelperLivroColumns.TABLE_NAME,                     // The table to query
-                projection,                               // The columns to return
-                null,                                     // The columns for the WHERE clause
-                null,                                     // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortByAdd                                 // The sort order
-        );
-
-        if (c.moveToFirst()) {
-            do {
-
-                long id = c.getLong(c.getColumnIndexOrThrow("_id"));
-                String tituloLivro = c.getString(c.getColumnIndexOrThrow("TituloLivro"));
-                String autor = c.getString(c.getColumnIndexOrThrow("Autor"));
-
-                livros.add(new Livro(id, tituloLivro, autor));
-
-            } while (c.moveToNext());
-        }
-        return livros;
     }
 
     private List<Disciplina> selectDisciplinas(Context context) {
@@ -273,7 +241,7 @@ public class UpdateBibliografiaFragment extends Fragment {
                 Log.d("AntesUpdate", "curso " + bibliografia.getCurso() + " livro " + bibliografia.getTituloLivro());
             }
 
-                Log.d("bibliografiaUpdate", "curso: " + bibliografiaUpdate.getCurso() + " livro " + bibliografiaUpdate.getTituloLivro());
+            Log.d("bibliografiaUpdate", "curso: " + bibliografiaUpdate.getCurso() + " livro " + bibliografiaUpdate.getTituloLivro());
 
             int i = updateBibliografiaLocalDB(getContext(), bibliografiaUpdate);
             Log.d("AATUALIZOU", "Total: " + i);
@@ -301,16 +269,22 @@ public class UpdateBibliografiaFragment extends Fragment {
 
         for (Livro livro : livrosDBLocal) {
             if (livro.get_id() == idsLivrosSelecionados.get(0)) {
-                values.put("Livro", livro.getTituloLivro());
-                values.put("Autor", livro.getAutor());
+                values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO,
+                        livro.getTituloLivro());
+                values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR,
+                        livro.getAutor());
+                values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_IMAGE_LIVRO,
+                        livro.getImage());
+
             }
         }
 
         for (Disciplina disciplina : disciplinasDBLocal) {
             if (disciplina.get_id() == idsDisciplinasSelecionadas.get(0)) {
-                values.put("Disciplina", disciplina.getNomeDisciplina());
-                values.put("Curso", disciplina.getCurso());
-
+                values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA,
+                        disciplina.getNomeDisciplina());
+                values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO,
+                        disciplina.getCurso());
             }
         }
 
@@ -319,12 +293,13 @@ public class UpdateBibliografiaFragment extends Fragment {
                 bibliografiaUpdate.getIdLivro() + "",
                 bibliografiaUpdate.getIdDisciplina() + ""
         };
+        String whereClause = "idLivro=? AND idDisciplina=?";
 
 
         return db.update(
                 DBHelperBibliografia.DBHelperBibliografiaColumns.TABLE_NAME,                     // The table to query
-                values,                               // The columns to return
-                "idLivro=? AND idDisciplina=?",                                     // The columns for the WHERE clause
+                values,                                  // The columns to return
+                whereClause,         // The columns for the WHERE clause
                 args                                     // The values for the WHERE clause
         );
 
@@ -334,57 +309,8 @@ public class UpdateBibliografiaFragment extends Fragment {
 
     private List<Bibliografia> selectBibliografiasLocalDB(Context context) {
 
-        List<Bibliografia> bibliografias = new ArrayList<>();
-        DBHelperBibliografia helper = new DBHelperBibliografia(context);
-        SQLiteDatabase db = helper.getReadableDatabase();
-
-
-        String[] projection = {
-
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO,
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA,
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO,
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR,
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO,
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA
-        };
-
-
-        String sortByAdd =
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO + " ASC ";
-
-        Cursor c = db.query(
-                DBHelperBibliografia.DBHelperBibliografiaColumns.TABLE_NAME,                     // The table to query
-                projection,                               // The columns to return
-                null,                                     // The columns for the WHERE clause
-                null,                                     // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortByAdd                                 // The sort order
-        );
-
-        if (c.moveToFirst()) {
-            do {
-
-
-                long idLivro = c.getLong(c.getColumnIndexOrThrow(DBHelperBibliografia.
-                        DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO));
-                long idDiscplina = c.getLong(c.getColumnIndexOrThrow(DBHelperBibliografia.
-                        DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA));
-                String disciplina = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
-                        DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA));
-                String curso = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
-                        DBHelperBibliografiaColumns.COLUMN_NAME_CURSO));
-                String autor = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
-                        DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR));
-                String livro = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
-                        DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO));
-
-                bibliografias.add(new Bibliografia(idLivro, idDiscplina, disciplina, livro, curso, autor));
-
-            } while (c.moveToNext());
-        }
-        return bibliografias;
+        SincronizeDatabaseLocalServer s = new SincronizeDatabaseLocalServer();
+        return s.selectBibliografiasLocalDB(context);
     }
 
     private void callUpdateBibliografia(Bibliografia bibliografia) {
@@ -409,11 +335,6 @@ public class UpdateBibliografiaFragment extends Fragment {
 
     private void toastSucessoInsertBibliografia() {
         Toast.makeText(getContext(), "Bibliografia atualizada com sucesso", Toast.LENGTH_LONG).show();
-    }
-
-    private void callBibliografia() {
-
-
     }
 
 

@@ -108,11 +108,12 @@ public class SincronizeDatabaseLocalServer {
 
     }
 
-    private List<Livro> selectLivrosLocalDB(Context context) {
+    public List<Livro> selectLivrosLocalDB(Context context) {
 
         List<Livro> livros = new ArrayList<>();
         DBHelperLivro helper = new DBHelperLivro(context);
         SQLiteDatabase db = helper.getReadableDatabase();
+        int livroImgIndex = 0;
 
         String[] projection = {
                 DBHelperLivro.DBHelperLivroColumns._ID,
@@ -122,7 +123,7 @@ public class SincronizeDatabaseLocalServer {
 
 
         String sortByAdd =
-                DBHelperLivro.DBHelperLivroColumns._ID + " DESC ";
+                DBHelperLivro.DBHelperLivroColumns._ID + " ASC ";
 
         Cursor c = db.query(
                 DBHelperLivro.DBHelperLivroColumns.TABLE_NAME,                     // The table to query
@@ -141,8 +142,12 @@ public class SincronizeDatabaseLocalServer {
                 String tituloLivro = c.getString(c.getColumnIndexOrThrow("TituloLivro"));
                 String autor = c.getString(c.getColumnIndexOrThrow("Autor"));
 
+                Livro livro = new Livro(id, tituloLivro, autor);
 
-                livros.add(new Livro(id, tituloLivro, autor));
+                livro.setImage(Livro.imgIndexLivro[livroImgIndex]);
+                livroImgIndex++;
+
+                livros.add(livro);
 
             } while (c.moveToNext());
         }
@@ -419,6 +424,7 @@ public class SincronizeDatabaseLocalServer {
         values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO, bibliografia.getTituloLivro());
         values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA, bibliografia.getNomeDisciplina());
         values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO, bibliografia.getCurso());
+        values.put(DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_IMAGE_LIVRO, bibliografia.getImageLivro());
 
 
         long newRowId = db.insert(Server.TABLE_BIBLIOGRAFIA, null, values);
@@ -427,7 +433,7 @@ public class SincronizeDatabaseLocalServer {
 
     }
 
-    private List<Bibliografia> selectBibliografiasLocalDB(Context context) {
+    public  List<Bibliografia> selectBibliografiasLocalDB(Context context) {
 
         List<Bibliografia> bibliografias = new ArrayList<>();
         DBHelperBibliografia helper = new DBHelperBibliografia(context);
@@ -435,14 +441,19 @@ public class SincronizeDatabaseLocalServer {
 
 
         String[] projection = {
-                DBHelperBibliografia.DBHelperBibliografiaColumns._ID,
+
                 DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO,
-                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA,
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO,
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR,
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO,
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA,
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_IMAGE_LIVRO,
         };
 
 
         String sortByAdd =
-                DBHelperBibliografia.DBHelperBibliografiaColumns._ID + " DESC ";
+                DBHelperBibliografia.DBHelperBibliografiaColumns.COLUMN_NAME_CURSO + " ASC ";
 
         Cursor c = db.query(
                 DBHelperBibliografia.DBHelperBibliografiaColumns.TABLE_NAME,                     // The table to query
@@ -457,18 +468,29 @@ public class SincronizeDatabaseLocalServer {
         if (c.moveToFirst()) {
             do {
 
-                long id = c.getLong(c.getColumnIndexOrThrow("_id"));
-                long idLivro = c.getLong(c.getColumnIndexOrThrow("idLivro"));
-                long idDiscplina = c.getLong(c.getColumnIndexOrThrow("idDisciplina"));
 
-                bibliografias.add(new Bibliografia(idLivro, idDiscplina));
+                long idLivro = c.getLong(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO));
+                long idDiscplina = c.getLong(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA));
+                String disciplina = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA));
+                String curso = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_CURSO));
+                String autor = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR));
+                String livro = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO));
+                String imgLivro = c.getString(c.getColumnIndexOrThrow(DBHelperBibliografia.
+                        DBHelperBibliografiaColumns.COLUMN_NAME_IMAGE_LIVRO));
+
+
+                bibliografias.add(new Bibliografia(idLivro, idDiscplina, disciplina, livro, curso, autor, imgLivro));
 
             } while (c.moveToNext());
         }
         return bibliografias;
     }
-
-
 
 
 }

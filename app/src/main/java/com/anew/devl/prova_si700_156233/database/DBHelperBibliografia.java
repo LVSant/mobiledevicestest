@@ -20,6 +20,7 @@ public class DBHelperBibliografia extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_AUTOR = "Autor";
         public static final String COLUMN_NAME_DISCIPLINA = "Disciplina";
         public static final String COLUMN_NAME_CURSO = "Curso";
+        public static final String COLUMN_NAME_IMAGE_LIVRO = "ImgLivro";
 
     }
 
@@ -30,6 +31,7 @@ public class DBHelperBibliografia extends SQLiteOpenHelper {
                     DBHelperBibliografiaColumns.COLUMN_NAME_ID_DISCIPLINA + " INTEGER ," +
                     DBHelperBibliografiaColumns.COLUMN_NAME_ID_LIVRO + " INTEGER ," +
                     DBHelperBibliografiaColumns.COLUMN_NAME_TITULO_LIVRO + " TEXT," +
+                    DBHelperBibliografiaColumns.COLUMN_NAME_IMAGE_LIVRO + " TEXT," +
                     DBHelperBibliografiaColumns.COLUMN_NAME_AUTOR+ " TEXT," +
                     DBHelperBibliografiaColumns.COLUMN_NAME_DISCIPLINA+ " TEXT," +
                     DBHelperBibliografiaColumns.COLUMN_NAME_CURSO+ " TEXT )"

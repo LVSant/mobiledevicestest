@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,8 @@ public class ShowBibliografiaFragment extends Fragment {
         Bundle arguments = getArguments();
         bibliografia = (Bibliografia) arguments.get(BIBLIOGRAFIA_BUSCA);
 
-
         TextView autorText = (TextView) view.findViewById(R.id.textAutor);
         autorText.setText(bibliografia.getAutor());
-
 
         TextView livroText = (TextView) view.findViewById(R.id.textLivro);
         livroText.setText(bibliografia.getTituloLivro());
@@ -48,31 +47,12 @@ public class ShowBibliografiaFragment extends Fragment {
         TextView cursoText = (TextView) view.findViewById(R.id.textCurso);
         cursoText.setText(bibliografia.getCurso());
 
-        String[] livrosImagesStub = {"http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg",
-                "http://statics.livrariacultura.net.br/products/capas_lg/926/11005926.jpg",
-                "http://www.livroandroid.com.br/site/imgs/livro_android.png",
-                "http://statics.livrariacultura.net.br/products/capas_lg/014/3014.jpg",
-                "http://www.training.com.br/aso/capa4.jpg"};
+        String bookImage = bibliografia.getImageLivro();
 
-
+        Log.d("THUMBBAIL LOADED", bookImage);
         //load album cover using Picasso! take a look at https://github.com/square/picasso
         Picasso.with(getContext())
-                .load(livrosImagesStub[Integer.parseInt(bibliografia.getIdLivro() + "")])
+                .load(bookImage)
                 .placeholder(R.drawable.ic_loading)
                 .into((ImageView) view.findViewById(R.id.livroThumbnail));
 

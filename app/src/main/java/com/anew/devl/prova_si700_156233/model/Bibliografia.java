@@ -14,16 +14,18 @@ public class Bibliografia implements Serializable {
     private String tituloLivro;
     private String curso;
     private String autor;
+    private String imageLivro;
 
 
     public Bibliografia(long idLivro, long idDisciplina, String nomeDisciplina,
-                        String tituloLivro, String curso, String autor) {
+                        String tituloLivro, String curso, String autor, String imageLivro) {
         this.idLivro = idLivro;
         this.idDisciplina = idDisciplina;
         this.nomeDisciplina = nomeDisciplina;
         this.tituloLivro = tituloLivro;
         this.curso = curso;
         this.autor = autor;
+        this.imageLivro = imageLivro;
     }
 
     public Bibliografia(long idLivro, long idDisciplina) {
@@ -88,5 +90,11 @@ public class Bibliografia implements Serializable {
         this._id = _id;
     }
 
+    public String getImageLivro() {
+        return imageLivro;
+    }
 
+    public void setImageLivro(String imageLivro) {
+        this.imageLivro = imageLivro;
+    }
 }

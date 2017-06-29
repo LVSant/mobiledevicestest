@@ -25,7 +25,6 @@ import com.anew.devl.prova_si700_156233.R;
 import com.anew.devl.prova_si700_156233.adapter.DisciplinaAdapter;
 import com.anew.devl.prova_si700_156233.adapter.LivroAdapter;
 import com.anew.devl.prova_si700_156233.database.DBHelperDisciplina;
-import com.anew.devl.prova_si700_156233.database.DBHelperLivro;
 import com.anew.devl.prova_si700_156233.database.SincronizeDatabaseLocalServer;
 import com.anew.devl.prova_si700_156233.model.Bibliografia;
 import com.anew.devl.prova_si700_156233.model.Disciplina;
@@ -115,42 +114,8 @@ public class NovaBibliografiaFragmet extends Fragment {
     }
 
     private List<Livro> selectLivros(Context context) {
-
-        List<Livro> livros = new ArrayList<>();
-        DBHelperLivro helper = new DBHelperLivro(context);
-        SQLiteDatabase db = helper.getReadableDatabase();
-
-        String[] projection = {
-                DBHelperLivro.DBHelperLivroColumns._ID,
-                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_TITULO_LIVRO,
-                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_AUTOR
-        };
-
-        String sortByAdd =
-                DBHelperLivro.DBHelperLivroColumns.COLUMN_NAME_TITULO_LIVRO + " DESC ";
-
-        Cursor c = db.query(
-                DBHelperLivro.DBHelperLivroColumns.TABLE_NAME,                     // The table to query
-                projection,                               // The columns to return
-                null,                                     // The columns for the WHERE clause
-                null,                                     // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortByAdd                                 // The sort order
-        );
-
-        if (c.moveToFirst()) {
-            do {
-
-                long id = c.getLong(c.getColumnIndexOrThrow("_id"));
-                String tituloLivro = c.getString(c.getColumnIndexOrThrow("TituloLivro"));
-                String autor = c.getString(c.getColumnIndexOrThrow("Autor"));
-
-                livros.add(new Livro(id, tituloLivro, autor));
-
-            } while (c.moveToNext());
-        }
-        return livros;
+        SincronizeDatabaseLocalServer s = new SincronizeDatabaseLocalServer();
+        return s.selectLivrosLocalDB(context);
     }
 
     private List<Disciplina> selectDisciplinas(Context context) {
@@ -263,6 +228,7 @@ public class NovaBibliografiaFragmet extends Fragment {
                 if (livro.get_id() == bib.getIdLivro()) {
                     bib.setTituloLivro(livro.getTituloLivro());
                     bib.setAutor(livro.getAutor());
+                    bib.setImageLivro(livro.getImage());
                 }
             }
 
