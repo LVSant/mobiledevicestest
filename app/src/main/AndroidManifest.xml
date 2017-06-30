@@ -35,7 +35,7 @@
         </service>
 
         <activity
-            android:name=".Navvv"
+            android:name=".AcivityBibliografiaManager"
             android:configChanges="orientation"
             android:label="@string/title_activity_navvvv"
             android:screenOrientation="portrait"

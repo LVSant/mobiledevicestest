@@ -21,7 +21,7 @@ import com.anew.devl.prova_si700_156233.fragment.BibliografiaFragment;
 import com.anew.devl.prova_si700_156233.fragment.Busca;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class Navvv extends AppCompatActivity {
+public class AcivityBibliografiaManager extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -30,7 +30,7 @@ public class Navvv extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navvvv);
+        setContentView(R.layout.activity_bibliografia_manager);
         setTitle("Bibliografia Manager");
 
         init();

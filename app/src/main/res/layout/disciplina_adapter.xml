@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeightSmall"
     android:padding="6dip"
-    tools:context=".Navvv">
+    tools:context=".AcivityBibliografiaManager">
 
     <ImageView
         android:id="@+id/icon"
